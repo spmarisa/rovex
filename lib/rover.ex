@@ -32,6 +32,7 @@ defmodule Rover do
       :E -> %Rover{ state | x: Integer.mod(state.x + 1, @world_width), y: state.y }
       :W -> %Rover{ state | x: Integer.mod(state.x - 1, @world_width), y: state.y }
     end
+    WorldMap.update_rover(state.name, state.x, state.y)
     {:noreply, new_state}
   end
 
@@ -46,6 +47,23 @@ defmodule Rover do
       :E -> %Rover{state | direction: :N}
       :W -> %Rover{state | direction: :S}
     end
+    WorldMap.update_rover(state.name, state.x, state.y)
     {:noreply, new_state}
+  end
+
+  def send_command(name, :F) do
+    Rover.go_forward(name)
+  end
+
+  def send_command(name, :B) do
+    Rover.go_backward(name)
+  end
+
+  def send_command(name, :L) do
+    Rover.rotate_left(name)
+  end
+
+  def send_command(name, :R) do
+    Rover.rotate_right(name)
   end
 end
